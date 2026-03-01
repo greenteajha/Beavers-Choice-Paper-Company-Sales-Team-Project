@@ -1,0 +1,62 @@
+# Reflection Report: Multi-Agent Sales System
+
+## 1) Architecture and Workflow Reflection
+
+The system is designed as a coordinated multi-agent workflow with one orchestrator and four worker agents:
+
+- `Orchestrator`: controls end-to-end sequencing and composes the final customer response.
+- `RequestParserAgent`: extracts requested items and quantities from free text and maps them to canonical catalog names.
+- `InventoryAgent`: evaluates reorder feasibility when stock is low or below threshold, using cash and supplier lead-time tools.
+- `QuotingAgent`: fallback pricing agent used only when historical pricing is unavailable.
+- `SalesAgent`: records confirmed sales transactions and triggers an internal financial snapshot.
+
+The workflow implemented in code follows five ordered steps:
+
+1. Parse customer request into structured items.
+2. Check inventory and classify each item (`FULFILLABLE`, `REORDER INITIATED`, `CANNOT FULFILL`).
+3. Build quote data with Python pricing logic (historical price lookup + deterministic discount rules), with limited quoting-agent fallback.
+4. Process sale only when quote JSON contains positive-priced, positive-quantity items.
+5. Compose a customer-facing response from structured inventory and quote outputs, then sanitize output to avoid internal error/financial leakage.
+
+This architecture was chosen to keep high-variance language tasks (request parsing/fallback pricing) in agents while keeping high-risk business logic (status classification, pricing math, transaction gatekeeping, and response formatting) deterministic in Python. The goal was to increase consistency for rubric-critical output fields (base price, discount, discount reason) and reduce LLM formatting drift.
+
+The workflow diagram file used for this architecture is `The Beaver's Choice Paper Company System Agent Architecture.png`.
+
+## 2) Evaluation Results and Strengths (from `test_results.csv`)
+
+From the latest `test_results.csv` run:
+
+- Evaluated requests in this run: **20**
+- Cash balance changes observed: **6**
+- Requests containing at least one positive-priced fulfilled item: **6**
+- Responses that include explicit "item not found" reasons: **8**
+- Responses that include deadline/restock reasoning: **9**
+
+Key strengths observed:
+
+- **Transparent customer messaging**: many responses now include itemized fields such as base price, discount percentage, discount rationale, and final total (for priced items).
+- **Clear non-fulfillment rationale**: unfulfillable items are often explained with concrete causes such as catalog mismatch or deadline-restock conflict.
+- **Safer output handling**: customer responses are sanitized to prevent internal parser errors and sensitive financial details from being exposed.
+- **Deterministic orchestration behavior**: core business decisions are now less dependent on free-form LLM output, improving reproducibility of response structure.
+
+## 3) Improvement Suggestions
+
+1. **Run full-sample evaluation consistently**
+   - The current output file reflects 20 requests, while final project evaluation should cover the full sample dataset. I would add a run-time assertion on expected record count and fail fast if fewer rows are processed than expected.
+
+2. **Separate reorder messaging from quote pricing**
+   - Current responses can include reorder lines with `0 units` and `$0.00`, which is technically consistent but customer-awkward. I would split response sections into:
+   - `Quoted/Fulfillable Items` (always with base/discount/final pricing)
+   - `Reorder Items` (ETA and feasibility only, no zero-price quote rows)
+
+3. **Harden parser normalization**
+   - The parser still occasionally struggles with complex item phrasing. I would add a deterministic post-parse normalization layer (alias dictionary + canonical matcher + validation pass) before inventory evaluation.
+
+4. **Add automated rubric checks**
+   - Add a lightweight validation script after each run to verify:
+   - no internal error leakage,
+   - required pricing fields present for each priced item,
+   - minimum fulfillment/cash-change thresholds,
+   - full expected request coverage.
+
+These improvements would increase reliability, readability of customer-facing responses, and confidence in rubric compliance.
