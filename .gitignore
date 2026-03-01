@@ -20,9 +20,6 @@ env/
 .venv/
 .env/
 
-# Test outputs
-test_results.csv
-
 # macOS
 .DS_Store
 .AppleDouble

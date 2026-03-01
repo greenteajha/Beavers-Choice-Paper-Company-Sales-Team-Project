@@ -1,0 +1,77 @@
+request_id,request_date,cash_balance,inventory_value,response
+1,2025-04-01,45123.45,4875.3,"Your order for paper supplies has been successfully processed. 
+
+- 200 sheets of A4 glossy paper: $40.00 
+- 100 sheets of heavy cardstock (white): $14.25 
+- 100 sheets of colored paper (assorted colors): $9.50 
+
+The total cost of your supplies is $63.75. 
+
+Your supplies will be delivered by April 15, 2025. Thank you for your order!"
+2,2025-04-03,45172.2,4825.3,"Your order has been processed successfully. You have ordered 500 units of Colored paper at a total cost of $48.75. Please note that the following items could not be fulfilled:
+- Streamers: item not found in catalog.
+- Balloons: item not found in catalog.
+Your order of Colored paper will be delivered by April 15, 2025."
+3,2025-04-04,45172.2,4825.3,"Order cannot be fulfilled due to insufficient stock for A3 paper and printer paper. A4 paper is on reorder status with an estimated restock by April 11, 2025. Please review your order."
+4,2025-04-05,45172.2,4825.3,"The order cannot be fulfilled as requested. The 500 sheets of high-quality, recycled cardstock cannot be supplied before the delivery deadline of April 15, 2025, as the restock arrives after this date. Additionally, the 250 sheets of A4 size printer paper also cannot be fulfilled for the same reason."
+5,2025-04-05,45217.2,4635.3,"Order Summary:
+
+- **Fulfilled Items:**
+  - **Cardstock:** 300 units for a total of $45.00 (Base price: $0.15/unit, Discount: 0.0% - standard tier discount applied; quantity under 500). Status: FULFILLABLE. 
+
+- **Reordered Items:**
+  - **Colored Paper:** 0 units (Base price: $0.10/unit, Discount: 0.0% - tight stock or reorder status reduced tier discount; quantity under 500). Estimated restock by 2025-04-09.
+
+- **Unavailable Items:**
+  - **Decorative Washi Tape:** 200 rolls - item not found in catalog.
+
+Please note that you will receive the cardstock shortly, and the colored paper will be restocked by the estimated date."
+6,2025-04-06,45217.2,4635.3,"Unfortunately, your request cannot be fulfilled as the white printer paper is not found in our live catalog. Additionally, the colored paper and cardstock are currently on reorder status and will not be available until approximately April 10, 2025. Therefore, we cannot process your order for delivery by April 15, 2025."
+7,2025-04-07,45217.2,4635.3,"We have successfully placed a partial order for your paper supplies for your upcoming exhibition. Here are the details:
+
+- **Large poster paper (24"" x 36"")**: 300 sheets can be fulfilled from stock (699 units available).
+- **Glossy A4 paper**: Reorder initiated with estimated restock by April 11, 2025. 
+- **A4 paper**: Reorder initiated with estimated restock by April 11, 2025. 
+- **Cardstock**: Reorder initiated with estimated restock by April 11, 2025.
+
+Please note that the glossy A4 paper, A4 paper, and cardstock will not be available for delivery by your requested date of April 15, 2025."
+8,2025-04-07,45217.2,4635.3,"The order cannot be fulfilled as the A4 recycled paper cannot be restocked in time before the deadline of April 15, 2025. Additionally, the quantities for A4 glossy paper, A4 matte paper, and A5 colored paper are not available for the requested amount."
+9,2025-04-07,54739.2,4005.2999999999997,"Your order for paper supplies has been successfully placed and fulfilled. Here are the details:
+
+1. **A4 Paper**: 200 units for a total of **$10.00** (Base price: $0.05/unit, 0% discount due to tight stock).
+2. **Glossy Paper**: 100 units for a total of **$19.00** (Base price: $0.20/unit, 5% discount due to abundant stock).
+3. **Kraft Paper**: 50 units for a total of **$500.00** (Base price: $10.00/unit, 0% discount as stock is fulfillable).
+
+Your total payment is **$529.00**. The items are scheduled for delivery by April 10, 2025. Thank you for your order!"
+13,2025-04-08,54739.2,4005.2999999999997,"Both items, A4 printing paper and cardstock, cannot be fulfilled by the requested delivery date of April 10, 2025, as the restock for both items arrives on April 12, 2025."
+12,2025-04-08,54739.2,4005.2999999999997,"The order cannot be fulfilled because both the standard printer paper and paper napkins are not available in the live catalog. The colored cardstock can be reordered, but it won't be available until after your requested delivery date of April 15, 2025. Please consider revising your order to include items that are currently available."
+10,2025-04-08,54739.2,4005.2999999999997,"The order for 500 sheets of high-quality glossy paper and 300 sheets of sturdy cardstock could not be fulfilled because both items are currently on reorder status. The estimated restock date for both items is April 12, 2025, which is before your required delivery date of April 15, 2025. If you would like to wait for the restock or modify your order, please let us know."
+11,2025-04-08,54739.2,4005.2999999999997,"Your order for 500 sheets of A3 glossy paper and 300 sheets of A4 matte paper has been placed. However, please note that both items are currently on reorder with an estimated restock date of April 12, 2025. We will notify you once your order is fulfilled."
+14,2025-04-09,54739.2,4005.2999999999997,"The order cannot be fulfilled due to stock availability issues. The A4 paper is on reorder with an estimated restock date of 2025-04-13, and both the colored paper and cardstock cannot be fulfilled as their restock happens after your requested delivery date of April 15, 2025."
+15,2025-04-12,54739.2,4005.2999999999997,"Unfortunately, we cannot fulfill your order for the paper supplies by the requested delivery date of April 15, 2025, as all items are out of stock and restock dates are beyond this deadline."
+16,2025-04-13,54739.2,4005.2999999999997,"Unfortunately, we cannot fulfill your order as all requested items are unavailable by your specified deadline of April 15, 2025. The A4 printer paper, colorful construction paper, and poster board are not in stock, and restock will not arrive in time."
+17,2025-04-14,54778.2,3955.2999999999997,"The order for paper plates has been recorded successfully. However, the following items could not be fulfilled:
+- A4 white printer paper: CANNOT FULFILL (Restock arrives after the delivery deadline).
+- A3 colored paper: CANNOT FULFILL (Restock arrives after the delivery deadline).
+- Table napkins: CANNOT FULFILL (item not found in catalog).
+- Biodegradable paper cups: CANNOT FULFILL (item not found in catalog).
+
+Only 500 paper plates have been processed successfully for your order."
+18,2025-04-14,54778.2,3955.2999999999997,"Unfortunately, I cannot fulfill your order for the paper supplies as all requested items are unavailable or will arrive after the required delivery date of April 15, 2025."
+19,2025-04-15,54778.2,3955.2999999999997,"Unfortunately, we are unable to fulfill your entire order for paper supplies. 
+
+- **A4 glossy paper**: CANNOT FULFILL — Restock arrives after your requested delivery date of April 20, 2025. 
+- **A3 matte paper**: CANNOT FULFILL — Restock arrives after your requested delivery date of April 20, 2025. 
+- **Cardstock**: A reorder has been initiated and is expected to arrive by April 19, 2025, but we cannot fulfill the order quantity of 1000 sheets at this time.
+
+Please let us know if you would like to change your order or if there's anything else we can assist with."
+20,2025-04-17,54778.2,3955.2999999999997,"We are unable to fulfill your order for the following items due to stock issues:
+
+- **Flyers**: CANNOT FULFILL — item not found in catalog.
+- **Posters**: REORDER INITIATED — estimated restock by 2025-04-24.
+- **Tickets**: CANNOT FULFILL — item not found in catalog.
+
+The only item available has initiated a reorder status:
+- **Posters**: Estimated restock by 2025-04-24.
+
+Thank you for your understanding."
