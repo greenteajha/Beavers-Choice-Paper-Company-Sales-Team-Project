@@ -1360,14 +1360,6 @@ def make_orchestrator_tools(inventory_agent, quoting_agent, sales_agent, request
             )
         return response_text
 
-    # Store direct references so Orchestrator.run can execute a deterministic Python pipeline.
-    context["tool_funcs"] = {
-        "parse_customer_request": parse_customer_request,
-        "delegate_check_inventory": delegate_check_inventory,
-        "generate_quote": generate_quote,
-        "process_sale": process_sale,
-        "compose_customer_response": compose_customer_response,
-    }
     return [parse_customer_request, delegate_check_inventory, generate_quote, process_sale, compose_customer_response]
 
 
@@ -1493,44 +1485,12 @@ class Orchestrator(ToolCallingAgent):
         )
 
     def run(self, task, **kwargs):
-        import json
         import re
 
         match = re.search(r'\(Date of request: (\d{4}-\d{2}-\d{2})\)', task)
         if match:
             self._context["request_date"] = match.group(1)
-
-        tool_funcs = self._context.get("tool_funcs", {})
-        if not tool_funcs:
-            return super().run(task, **kwargs)
-
-        # Strip synthetic date suffix from the natural-language request before tool handoff.
-        customer_request = re.sub(r"\s*\(Date of request: \d{4}-\d{2}-\d{2}\)\s*$", "", str(task)).strip()
-
-        structured_items = tool_funcs["parse_customer_request"](customer_request)
-        inventory_report = tool_funcs["delegate_check_inventory"](structured_items, customer_request)
-        quote = tool_funcs["generate_quote"](customer_request, inventory_report)
-
-        # Persist sales only when quote JSON contains at least one positive-priced line item.
-        has_priced_items = False
-        try:
-            parsed_quote = json.loads(str(quote))
-            if isinstance(parsed_quote, dict):
-                parsed_quote = [parsed_quote]
-            if isinstance(parsed_quote, list):
-                has_priced_items = any(
-                    isinstance(rec, dict)
-                    and float(rec.get("final_price", 0) or 0) > 0
-                    and int(rec.get("quantity", 0) or 0) > 0
-                    for rec in parsed_quote
-                )
-        except Exception:
-            has_priced_items = False
-
-        if has_priced_items:
-            tool_funcs["process_sale"](customer_request, quote)
-
-        response = tool_funcs["compose_customer_response"](customer_request, inventory_report, quote)
+        response = super().run(task, **kwargs)
         return sanitize_customer_response(response)
 
 # Run your test scenarios by writing them here. Make sure to keep track of them.

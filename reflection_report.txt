@@ -18,7 +18,7 @@ The workflow implemented in code follows five ordered steps:
 4. Process sale only when quote JSON contains positive-priced, positive-quantity items.
 5. Compose a customer-facing response from structured inventory and quote outputs, then sanitize output to avoid internal error/financial leakage.
 
-This architecture was chosen to keep high-variance language tasks (request parsing/fallback pricing) in agents while keeping high-risk business logic (status classification, pricing math, transaction gatekeeping, and response formatting) deterministic in Python. The goal was to increase consistency for rubric-critical output fields (base price, discount, discount reason) and reduce LLM formatting drift.
+This architecture was chosen to keep high-variance language tasks (request parsing and fallback pricing) in worker agents while keeping business rules (status checks, pricing math, transaction gating, and response sanitization) controlled in code. The orchestrator delegates through registered tools via the framework planner instead of manually calling sub-agents inside `run()`, which aligns with the expected orchestration pattern.
 
 The workflow diagram file used for this architecture is `The Beaver's Choice Paper Company System Agent Architecture.png`.
 
@@ -27,36 +27,26 @@ The workflow diagram file used for this architecture is `The Beaver's Choice Pap
 From the latest `test_results.csv` run:
 
 - Evaluated requests in this run: **20**
-- Cash balance changes observed: **6**
-- Requests containing at least one positive-priced fulfilled item: **6**
-- Responses that include explicit "item not found" reasons: **8**
-- Responses that include deadline/restock reasoning: **9**
+- Cash balance changes observed: **4**
+- Responses with explicit rationale markers (e.g., "because", "item not found", deadline/restock reason): **10**
+- Responses with internal error/diagnostic leakage markers: **0**
 
 Key strengths observed:
 
 - **Transparent customer messaging**: many responses now include itemized fields such as base price, discount percentage, discount rationale, and final total (for priced items).
 - **Clear non-fulfillment rationale**: unfulfillable items are often explained with concrete causes such as catalog mismatch or deadline-restock conflict.
 - **Safer output handling**: customer responses are sanitized to prevent internal parser errors and sensitive financial details from being exposed.
-- **Deterministic orchestration behavior**: core business decisions are now less dependent on free-form LLM output, improving reproducibility of response structure.
+- **Delegation-aligned orchestration**: orchestration is now tool-driven through the orchestrator agent, while worker agents remain specialized and independently testable.
 
 ## 3) Improvement Suggestions
 
-1. **Run full-sample evaluation consistently**
-   - The current output file reflects 20 requests, while final project evaluation should cover the full sample dataset. I would add a run-time assertion on expected record count and fail fast if fewer rows are processed than expected.
+1. **Customer Order Revision Workflow**
+   - Add a follow-up feature where customers can accept a partial quote, replace unavailable items with suggested alternatives, or adjust delivery deadlines in one reply. The system would then regenerate quote and fulfillment plans without starting from scratch.
 
-2. **Separate reorder messaging from quote pricing**
-   - Current responses can include reorder lines with `0 units` and `$0.00`, which is technically consistent but customer-awkward. I would split response sections into:
-   - `Quoted/Fulfillable Items` (always with base/discount/final pricing)
-   - `Reorder Items` (ETA and feasibility only, no zero-price quote rows)
+2. **Supplier Multi-Source Optimization**
+   - Add supplier profiles (lead times, minimum order quantities, pricing tiers, reliability scores) and let the inventory/sales flow choose the best supplier mix for reorder items. This would convert simple reorder checks into an optimization feature.
 
-3. **Harden parser normalization**
-   - The parser still occasionally struggles with complex item phrasing. I would add a deterministic post-parse normalization layer (alias dictionary + canonical matcher + validation pass) before inventory evaluation.
+3. **Customer Portal and Order Tracking**
+   - Add a lightweight customer-facing status API/dashboard that shows quote accepted/rejected state, reorder ETA milestones, shipment readiness, and change history per request.
 
-4. **Add automated rubric checks**
-   - Add a lightweight validation script after each run to verify:
-   - no internal error leakage,
-   - required pricing fields present for each priced item,
-   - minimum fulfillment/cash-change thresholds,
-   - full expected request coverage.
-
-These improvements would increase reliability, readability of customer-facing responses, and confidence in rubric compliance.
+These features extend the system beyond baseline order handling and introduce product-level capabilities for real-world operations.

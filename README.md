@@ -22,13 +22,15 @@ The system processes customer requests, checks inventory constraints, generates 
 
 ## Architecture
 
-The runtime flow is deterministic:
+The orchestrator uses tool-calling delegation to coordinate the workflow:
 
 1. `parse_customer_request`
 2. `delegate_check_inventory`
 3. `generate_quote`
 4. `process_sale` (only when priced items exist)
 5. `compose_customer_response`
+
+The sequencing is directed by the orchestrator agent prompt and executed through registered tools, with worker-agent calls encapsulated inside those tools.
 
 Worker agents are specialized by function:
 
@@ -80,4 +82,4 @@ A run will:
 ## Notes
 
 - Customer responses are sanitized to avoid leaking internal diagnostics or finance-only details.
-- Pricing logic is deterministic in Python for consistency across runs.
+- Pricing and discount computation are primarily handled in Python for consistency, with fallback agent assistance when needed.
